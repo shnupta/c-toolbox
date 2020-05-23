@@ -1,6 +1,5 @@
 CC	=	gcc
 CFLAGS	=	-Wall
-LDLIBS	=	-llog
 LIB     =       lib/toolkit.a
 LIBOBJS	=	src/log.o src/test.o
 BUILD	=	$(LIB)
@@ -12,6 +11,7 @@ clean:
 
 $(LIB): $(LIBOBJS)
 	ar rcs $(LIB) $(LIBOBJS)
+	ranlib $(LIB)
 
 src/log.o: src/log.h
 
