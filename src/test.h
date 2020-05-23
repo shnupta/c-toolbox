@@ -13,6 +13,6 @@ int test_string(const char* got, const char* expected, const char* name);
 
 void print_result(int passed, const char* fmt, ...);
 
-void run_test_suite(const int (*tests[])(void), const int count, const char* filename);
+void run_test_suite(const int (*tests[])(char* testname), const int count, const char* filename);
 
 #endif

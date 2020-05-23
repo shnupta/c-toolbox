@@ -48,8 +48,16 @@ void print_result(int passed, const char* fmt, ...) {
 	fflush(stdout);
 }
 
-void run_test_suite(const int (*tests[])(void), const int count, const char* filename) {
-	char* buffer = (char*) calloc(MAX_TEST_STRING_LENGTH, sizeof(char));
+/*
+ * Receives an array of function pointers, which receive a string which they
+ * **MUST** copy the name of their test function into.
+ * Example:
+ *		int test_some_feature(char* tname) {
+ *			strcpy(tname, "test_some_feature");	// MUST DO
+ *			return 1 == 2;
+ *		}
+ */
+void run_test_suite(const int (*tests[])(char* testname), const int count, const char* filename) {
 	char* passed = (char*) calloc(count * MAX_TEST_STRING_LENGTH, sizeof(char));
 	char* failed = (char*) calloc(count * MAX_TEST_STRING_LENGTH, sizeof(char));
 
@@ -58,21 +66,29 @@ void run_test_suite(const int (*tests[])(void), const int count, const char* fil
 
 	printf("Running test suite - %s\n", filename);
 
-	freopen("/dev/null", "a", stdout);
-	setbuf(stdout, buffer);
+	char* tname = calloc(MAX_TEST_STRING_LENGTH, sizeof(char));
+	char* l = calloc(MAX_TEST_STRING_LENGTH, sizeof(char));
 
 	for (int i = 0; i < count; i++) {
-		memset(buffer, 0, MAX_TEST_STRING_LENGTH * sizeof(char));
-		if (tests[i]()) {
-			strcat(passed, buffer);
+		int pass = tests[i](tname);
+		if (tname == NULL) {
+			printf("Test function must set the test name.\n");
+			return;
+		}
+		sprintf(l, "[\x1b[93m TEST \x1b[0m]  -  %s  -  ", tname);
+		if (pass) {
+			strcat(passed, l);
+			strcat(passed, "\x1b[92mPASS\x1b[0m\n");
 			p_count++;
 		} else {
-			strcat(failed, buffer);
+			strcat(failed, l);
+			strcat(failed, "\x1b[91mFAIL\x1b[0m\n");
 			f_count++;
 		}
 	}	
 
-	freopen ("/dev/tty", "a", stdout);
+	free(tname);
+	free(l);
 
 	printf("%d / %d tests passed\n", p_count, count);
 	printf("\n");
@@ -80,7 +96,6 @@ void run_test_suite(const int (*tests[])(void), const int count, const char* fil
 	printf("\n");
 	printf("Failing tests: (%d)\n%s", f_count, failed);
 
-	free(buffer);
 	free(passed);
 	free(failed);
 }
