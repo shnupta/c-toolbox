@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <stdarg.h>
 
 static const char* LEVEL_STRINGS[] = {"DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
 static const char* LEVEL_COLORS[] = {
@@ -14,7 +15,8 @@ void log_log
 		const char* function, 
 		const char* file,
 		const int line, 
-		const char* message
+		const char* fmt,
+		...
 ) 
 {
 	time_t cur_time;
@@ -28,13 +30,18 @@ void log_log
 	fprintf
 		(
 			stderr, 
-			"[ %s%-5s\x1b[0m ]   %s   %s() %s:%d   %s\n",
+			"[ %s%-5s\x1b[0m ]   %s   %s() %s:%d   ",
 			LEVEL_COLORS[level], 
 			LEVEL_STRINGS[level], 
 			time_str,
 			function, 
 			file, 
-			line, 
-			message
+			line
 		);
+	va_list args;	
+	va_start(args, fmt);
+	vfprintf(stderr, fmt, args);
+	va_end(args);
+	fprintf(stderr, "\n");
+	fflush(stderr);
 }
