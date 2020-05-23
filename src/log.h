@@ -3,7 +3,7 @@
 
 enum { LOG_DEBUG, LOG_INFO, LOG_WARN, LOG_ERROR, LOG_FATAL };
 
-#ifndef NDEBUG
+#ifndef NLOG
 
 #define log_debug(...) log_log(LOG_DEBUG, __FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
 
