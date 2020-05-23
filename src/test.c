@@ -49,9 +49,9 @@ void print_result(int passed, const char* fmt, ...) {
 }
 
 void run_test_suite(const int (*tests[])(void), const int count, const char* filename) {
-	char* buffer = (char*) malloc(MAX_TEST_STRING_LENGTH * sizeof(char));
-	char* passed = (char*) malloc(count * MAX_TEST_STRING_LENGTH * sizeof(char));
-	char* failed = (char*) malloc(count * MAX_TEST_STRING_LENGTH * sizeof(char));
+	char* buffer = (char*) calloc(MAX_TEST_STRING_LENGTH, sizeof(char));
+	char* passed = (char*) calloc(count * MAX_TEST_STRING_LENGTH, sizeof(char));
+	char* failed = (char*) calloc(count * MAX_TEST_STRING_LENGTH, sizeof(char));
 
 	int p_count = 0;
 	int f_count = 0;
@@ -62,6 +62,7 @@ void run_test_suite(const int (*tests[])(void), const int count, const char* fil
 	setbuf(stdout, buffer);
 
 	for (int i = 0; i < count; i++) {
+		memset(buffer, 0, MAX_TEST_STRING_LENGTH * sizeof(char));
 		if (tests[i]()) {
 			strcat(passed, buffer);
 			p_count++;
@@ -69,7 +70,6 @@ void run_test_suite(const int (*tests[])(void), const int count, const char* fil
 			strcat(failed, buffer);
 			f_count++;
 		}
-		memset(buffer, 0, MAX_TEST_STRING_LENGTH);
 	}	
 
 	freopen ("/dev/tty", "a", stdout);
