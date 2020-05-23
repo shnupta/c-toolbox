@@ -30,7 +30,7 @@ void log_log
 	fprintf
 		(
 			stderr, 
-			"[ %s%-5s\x1b[0m ]   %s   %s() %s:%d   ",
+			"[ %s%-5stx1b[0m ]   %s   %s() %s:%d   ",
 			LEVEL_COLORS[level], 
 			LEVEL_STRINGS[level], 
 			time_str,

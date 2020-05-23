@@ -51,5 +51,5 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# ignore my test stuff
-src/test*
+# ignore my testing around
+src/main*
