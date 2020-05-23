@@ -1,8 +1,8 @@
 CC	=	gcc
 CFLAGS	=	-Wall
 LDLIBS	=	-llog
-LIB     =       lib/log.a
-LIBOBJS	=	src/log.o
+LIB     =       lib/toolkit.a
+LIBOBJS	=	src/log.o src/test.o
 BUILD	=	$(LIB)
 
 all:	$(BUILD)
@@ -14,3 +14,5 @@ $(LIB): $(LIBOBJS)
 	ar rcs $(LIB) $(LIBOBJS)
 
 src/log.o: src/log.h
+
+src/test.o: src/test.h
